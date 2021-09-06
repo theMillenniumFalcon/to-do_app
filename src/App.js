@@ -13,6 +13,7 @@ const fetcher = (url, body) => fetch(url, {
 })
 
 function App() {
+  const [templang, setTemplang] = useState('')
 
   const mutation = useMutation((body) => fetcher('/api/create-record', body), {
     // side-effects
@@ -24,12 +25,22 @@ function App() {
     },
   })
 
-  const { data: favlangs } = useQuery('favlangs', () => {
+  const { data: favlangs, isLoading, isError } = useQuery('favlangs', () => {
     return fetch('/api/get-records').then((response) => response.json())
+  }, {
+    select: data => data.lang
   })
 
   function callMutations() {
-    mutation.mutate()
+    mutation.mutate({ record: templang })
+  }
+
+  if(isLoading) {
+    return <p>Loading...</p>
+  }
+
+  if(isError) {
+    return <p>Error with request</p>
   }
   
   return (
@@ -38,6 +49,7 @@ function App() {
       {favlangs.map((lang) => {
         return <li key = {lang}>{lang}</li>
       })}
+      <input type="text" value={templang} onChange={e => setTemplang(e.target.value)} />
       <p onClick={callMutations}>Submit</p>
     </div>
   );
