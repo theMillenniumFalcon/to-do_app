@@ -24,13 +24,20 @@ function App() {
     },
   })
 
+  const { data: favlangs } = useQuery('favlangs', () => {
+    return fetch('/api/get-records').then((response) => response.json())
+  })
+
   function callMutations() {
-    mutation.mutate('')
+    mutation.mutate()
   }
   
   return (
     <div className="App">
       <h1>Some fav languages</h1>
+      {favlangs.map((lang) => {
+        return <li key = {lang}>{lang}</li>
+      })}
       <p onClick={callMutations}>Submit</p>
     </div>
   );
