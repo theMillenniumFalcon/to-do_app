@@ -1,23 +1,37 @@
-import logo from './logo.svg';
+import React, { useState } from 'react'
 import './App.css';
+import  { useQuery, useMutation } from 'react-query'
+import Post from './Post'
+import client from './react-query-client'
+
+const fetcher = (url, body) => fetch(url, {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify(body),
+})
 
 function App() {
+
+  const mutation = useMutation((body) => fetcher('/api/create-record', body), {
+    // side-effects
+    onSuccess(data) {
+      console.log('Got response from backend', data)
+    },
+    onError(error) {
+      console.log('Got error from backend', error)
+    },
+  })
+
+  function callMutations() {
+    mutation.mutate('')
+  }
+  
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>Some fav languages</h1>
+      <p onClick={callMutations}>Submit</p>
     </div>
   );
 }
