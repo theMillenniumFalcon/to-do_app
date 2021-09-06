@@ -9,8 +9,9 @@ app.get('/api/get-records', (req, res) => {
     res.json({ lang: favlangs})
 })
 
-app.post('/api/add-record', (req, res) => {
+app.post('/api/create-record', (req, res) => {
     const record = req.body.record
+    console.log(record)
     favlangs.push(record)
     res.json({ status: 'ok' })
 })

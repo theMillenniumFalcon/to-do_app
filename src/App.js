@@ -19,6 +19,8 @@ function App() {
     // side-effects
     onSuccess(data) {
       console.log('Got response from backend', data)
+      setTemplang('')
+      client.invalidateQueries('favlangs')
     },
     onError(error) {
       console.log('Got error from backend', error)
